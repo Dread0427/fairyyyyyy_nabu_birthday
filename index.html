@@ -326,8 +326,7 @@ body:not(.on-cover) #stars{opacity:0}
         <article class="card end">
       <p>No matter how many birthdays pass, I hope I get to be there to celebrate every single one of them with you.<br>If I had to choose again, in every lifetime, I&#x27;d still choose you.<br>Happy Birthday, my favourite person. Keep smiling, my Fairyyy Nabu. I love you more than words can ever explain. ❤️</p>
       <p>And always remember, I love youu more than anything and anyone and I will always keep loving and admiring you till my last breath.</p>
-      <div class="big">I Love You My Nabu!</div>
-      <p class="small">This little corner of the internet will always be yours.</p>
+      <p style="text-align:left;color:#8a6a79;margin:18px 0 0;line-height:1.7">Your beloved<br><b style="color:#c54e7c;font-size:1.15em">Zihad</b></p>      <div style="margin-top:20px;text-align:center"><button id="voiceBtn" type="button" style="appearance:none;border:1px solid #efc4d6;background:#fff;color:#c54e7c;border-radius:999px;padding:12px 22px;font:inherit;font-weight:700;cursor:pointer">Play your note</button> <audio id="voiceNote" src="assets/birthday-note.m4a" preload="none"></audio></div>
     </article>
   </section>
 
@@ -492,6 +491,7 @@ body:not(.on-cover) #stars{opacity:0}
     if (reduce) draw(0);
   });
 
+  var vb=document.getElementById("voiceBtn"), vn=document.getElementById("voiceNote"); if(vb && vn){ vb.addEventListener("click",function(){ if(vn.paused){ vn.play().catch(function(){ vb.textContent="Tap again"; }); } else { vn.pause(); } }); vn.onplay=function(){vb.textContent="Pause";}; vn.onpause=function(){vb.textContent="Play your note";}; vn.onended=function(){vb.textContent="Play again";}; }
   startStars();
   go(0);
 })();
