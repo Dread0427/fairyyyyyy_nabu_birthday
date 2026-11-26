@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#060409">
+<meta name="color-scheme" content="light">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<meta property="og:title" content="Happy Birthday, Fairyyyy Nabuu 💗">
+<meta property="og:description" content="A little birthday surprise, made just for you.">
+<meta name="description" content="A little birthday surprise, made just for you.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%F0%9F%92%97%3C/text%3E%3C/svg%3E">
+<title>Happy Birthday, Fairyyyy Nabuu 💗</title>
+<style>
+:root{
+  --pink:#f7a9c4; --rose:#d95f8d; --deep:#c54e7c; --ink:#573849;
+  --muted:#8a6a79; --cream:#fff8fb; --card:#ffffff;
+  --shadow:0 18px 50px rgba(169,78,110,.14);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;height:100%}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{
+  font-family:Georgia,'Times New Roman',serif;
+  color:var(--ink);
+  background:#060409;
+  overflow:hidden;
+  overscroll-behavior:none;
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
+img{display:block;max-width:100%}
+
+/* ---------- starfield ---------- */
+#stars{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:1;transition:opacity .9s ease}
+body:not(.on-cover) #stars{opacity:0}
+
+/* ---------- screens ---------- */
+#app{position:relative;z-index:1;height:100%;overflow:hidden}
+.screen{
+  position:absolute;inset:0;
+  display:none;flex-direction:column;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:calc(env(safe-area-inset-top,0px) + 26px) 18px calc(env(safe-area-inset-bottom,0px) + 104px);
+}
+.screen.is-active{display:flex}
+.screen.enter-forward{animation:enterForward .45s cubic-bezier(.22,.7,.25,1) both}
+.screen.enter-back{animation:enterBack .45s cubic-bezier(.22,.7,.25,1) both}
+@keyframes enterForward{from{opacity:0;transform:translate3d(32px,0,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+@keyframes enterBack{from{opacity:0;transform:translate3d(-32px,0,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+@media (prefers-reduced-motion:reduce){
+  .screen.enter-forward,.screen.enter-back{animation:none}
+}
+
+/* ---------- cover ---------- */
+#cover{
+  align-items:center;justify-content:center;text-align:center;
+  padding-bottom:calc(env(safe-area-inset-bottom,0px) + 40px);
+  background:
+    radial-gradient(120% 80% at 50% 8%,rgba(247,169,196,.16),transparent 60%),
+    radial-gradient(90% 60% at 12% 92%,rgba(217,95,141,.14),transparent 62%),
+    radial-gradient(80% 60% at 92% 78%,rgba(120,90,200,.12),transparent 60%),
+    #060409;
+}
+.cover-inner{width:100%;max-width:520px;animation:rise 1.1s cubic-bezier(.2,.7,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.eyebrow{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:11px;letter-spacing:.42em;text-transform:uppercase;
+  color:#c9a7b8;margin-bottom:16px;padding-left:.42em;
+}
+.cover h1{
+  margin:0 0 10px;font-weight:normal;line-height:1.06;
+  font-size:clamp(38px,12.5vw,74px);
+  background:linear-gradient(180deg,#ffffff 0%,#ffe3ee 52%,#f7a9c4 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  text-shadow:0 0 42px rgba(247,169,196,.28);
+}
+.cover .sub{
+  font-size:clamp(14px,3.6vw,17px);line-height:1.75;color:#b79aa8;
+  max-width:330px;margin:0 auto 34px;
+}
+.enter{
+  min-width:190px;min-height:54px;padding:16px 36px;border-radius:999px;
+  font-family:Arial,Helvetica,sans-serif;font-size:15px;letter-spacing:.16em;text-transform:uppercase;
+  color:#2a0d18;background:linear-gradient(180deg,#ffd3e2,#f7a9c4);
+  box-shadow:0 12px 34px rgba(247,169,196,.35),inset 0 1px 0 rgba(255,255,255,.7);
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+.enter:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(247,169,196,.45),inset 0 1px 0 rgba(255,255,255,.7)}
+.enter:active{transform:translateY(0) scale(.985)}
+  body:not(.on-cover) #enter{display:none}
+
+/* ---------- inner pages ---------- */
+.page{background:linear-gradient(180deg,#fff7fa 0%,#ffe9f1 46%,#fff8fb 100%)}
+.page-head{text-align:center;margin:0 auto 22px;max-width:560px}
+.page-head h2{
+  font-weight:normal;color:var(--deep);margin:0 0 8px;
+  font-size:clamp(26px,7.4vw,40px);line-height:1.15;
+}
+.page-head p{margin:0;color:var(--muted);font-size:clamp(13.5px,3.5vw,16px);line-height:1.7}
+
+.card{
+  position:relative;
+  background:var(--card);border-radius:26px;padding:clamp(22px,6vw,40px);
+  box-shadow:var(--shadow);border:1px solid #fbe0ea;
+  line-height:1.95;font-size:clamp(16px,4.3vw,18.5px);
+  max-width:620px;width:100%;margin:0 auto;
+}
+.card::before{
+  content:"❀";display:block;text-align:center;color:#f0b7cd;
+  font-size:19px;line-height:1;margin:0 0 16px;
+}
+.card p{margin:0 0 16px}
+.card p:last-child{margin-bottom:0}
+.card .sign{display:block;margin-top:22px;color:var(--deep);font-size:clamp(19px,5vw,24px)}
+
+.ph{color:#b98ba0;font-style:italic;user-select:text}
+
+/* ---------- memory grid ---------- */
+.grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  max-width:620px;width:100%;margin:0 auto;
+}
+.shot{
+  margin:0;background:var(--card);border-radius:20px;overflow:hidden;
+  border:1px solid #fbe0ea;box-shadow:0 10px 26px rgba(169,78,110,.10);
+  display:flex;flex-direction:column;
+}
+.shot .pbox{
+  position:relative;aspect-ratio:1/1;width:100%;
+  background:linear-gradient(160deg,#ffe3ee,#f8d0e0);
+  display:grid;place-items:center;align-content:center;gap:5px;
+  text-align:center;padding:10px;cursor:pointer;
+  font-family:Arial,Helvetica,sans-serif;font-size:11.5px;font-style:normal;color:#a9738a;
+}
+.shot .pbox img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.shot .ph-ico{font-size:22px;opacity:.8;line-height:1}
+.shot .cap{
+  padding:10px 12px 12px;font-size:clamp(12px,3.2vw,13.5px);
+  line-height:1.5;color:var(--muted);text-align:left;
+}
+.shot .cap:empty{display:none}
+
+/* ---------- last page ---------- */
+.end{text-align:center}
+.end::before{content:"🎀 💗 🎂";display:block;font-size:clamp(20px,5.6vw,26px);margin:0 0 14px;letter-spacing:.1em}
+.end .big{font-size:clamp(30px,9vw,52px);font-weight:normal;color:var(--deep);margin:14px 0 12px;line-height:1.12}
+.end .small{color:var(--muted);font-size:15px}
+
+/* ---------- lightbox ---------- */
+.lb{
+  position:fixed;inset:0;z-index:60;
+  display:grid;place-items:center;
+  padding:calc(env(safe-area-inset-top,0px) + 20px) 16px calc(env(safe-area-inset-bottom,0px) + 20px);
+  background:rgba(8,3,6,.94);
+  opacity:0;visibility:hidden;transition:opacity .28s ease,visibility .28s;
+}
+.lb.on{opacity:1;visibility:visible}
+.lb img{max-width:100%;max-height:78vh;border-radius:14px;object-fit:contain;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.lb-cap{color:#e9cfda;font-size:14px;line-height:1.6;text-align:center;margin:14px 10px 0;max-width:520px}
+.lb-close{
+  position:absolute;top:calc(env(safe-area-inset-top,0px) + 14px);right:14px;
+  width:48px;height:48px;border-radius:999px;display:grid;place-items:center;
+  background:rgba(255,255,255,.14);color:#fff;font-size:20px;line-height:1;
+}
+
+/* ---------- bottom bar ---------- */
+#bar{
+  position:fixed;left:0;right:0;bottom:0;z-index:6;
+  display:flex;align-items:center;gap:10px;
+  padding:12px 16px calc(env(safe-area-inset-bottom,0px) + 12px);
+  transition:opacity .35s ease,transform .35s ease;
+}
+#bar.hide{opacity:0;transform:translateY(14px);pointer-events:none}
+.navbtn{
+  min-width:48px;min-height:48px;border-radius:999px;
+  display:grid;place-items:center;
+  font-family:Arial,Helvetica,sans-serif;font-size:14.5px;letter-spacing:.04em;
+  background:rgba(255,255,255,.86);color:var(--deep);
+  border:1px solid #f6cfe0;box-shadow:0 6px 18px rgba(169,78,110,.12);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  transition:transform .16s ease,background .16s ease;
+}
+.navbtn:active{transform:scale(.96)}
+#next{padding:0 22px;min-height:50px;background:linear-gradient(180deg,#ffd3e2,#f7a9c4);color:#2a0d18;border-color:transparent;font-weight:bold}
+#back{padding:0 14px;visibility:hidden}
+#dots{display:flex;flex:1;align-items:center;justify-content:center;gap:7px}
+.dot{width:7px;height:7px;border-radius:999px;background:#e9c3d3;transition:width .3s ease,background .3s ease}
+.dot.on{width:20px;background:var(--rose)}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001s !important;transition-duration:.001s !important}
+}
+
+/* ---------- print / save as PDF keepsake ---------- */
+@media print{
+  @page{margin:14mm}
+  html,body{height:auto;overflow:visible;background:#fff}
+  #stars,#bar,#cover,.lb{display:none !important}
+  #app{position:static;height:auto;overflow:visible}
+  .screen,.screen.is-active{
+    display:block;position:static;height:auto;overflow:visible;
+    padding:0 0 18px;break-after:page;page-break-after:always;
+    animation:none;background:#fff8fb;
+  }
+  .screen:last-child{break-after:auto;page-break-after:auto}
+  .card,.shot{break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  .ph,.ph-txt{display:none}
+  .shot .pbox{background:#ffe3ee}
+}
+</style>
+</head>
+<body class="on-cover">
+
+<canvas id="stars" aria-hidden="true"></canvas>
+
+<main id="app">
+
+  <!-- ============ 0. COVER ============ -->
+  <section class="screen is-active" id="cover">
+    <div class="cover-inner">
+      <div class="eyebrow">A little birthday surprise</div>
+      <h1>Fairyyyy<br>Nabuu</h1>
+      <p class="sub">Welcome</p>
+      <button class="enter" id="enter">Enter</button>
+    </div>
+  </section>
+
+  <!-- ============ 1. YOUR WORDS ============ -->
+  <section class="screen page" id="p1">
+    <div class="page-head">
+      <h2>A Little Piece of My Heart</h2>
+      <p>For the girl who makes my world a little more beautiful.</p>
+    </div>
+        <article class="card">
+      <p>Happy Birthday,my love,my dearest Nabuu. I hope today brings you as much happiness as you bring into my life.You deserve all the love, peace, and beautiful things this world has to offer.</p>
+      <p>I may not always find the perfect words to express how much you mean to me, but I hope you never doubt how special you are to me. I&#x27;m really lucky to have you, and I hope I get to make countless more memories with you.</p>
+      <span class="sign">If I had to choose again, in every lifetime, I&#x27;d still choose you.</span>
+    </article>
+  </section>
+
+  <!-- ============ 2. MEMORY 1 ============ -->
+  <section class="screen page" id="p2">
+    <div class="page-head">
+      <h2>Memory 01</h2>
+      <p>A few little words under every photo.</p>
+    </div>
+    <div class="grid">
+      <figure class="shot">
+        <div class="pbox" data-photo="01"><img src="assets/photos/photo-01.jpg" alt="Memory 01"></div>
+        <figcaption class="cap">Pakhiiii.</figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="pbox" data-photo="02"><img src="assets/photos/photo-02.jpg" alt="Memory 02"></div>
+        <figcaption class="cap">Madam jiii.</figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="pbox" data-photo="03"><img src="assets/photos/photo-03.jpg" alt="Memory 03"></div>
+        <figcaption class="cap">Angel Eyes</figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="pbox" data-photo="04"><img src="assets/photos/photo-04.jpg" alt="Memory 04"></div>
+        <figcaption class="cap">Simply perfect.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ 3. MEMORY 2 ============ -->
+  <section class="screen page" id="p3">
+    <div class="page-head">
+      <h2>Memory 02</h2>
+      <p>A few little words under every photo.</p>
+    </div>
+    <div class="grid">
+      <figure class="shot">
+        <div class="pbox" data-photo="05"><img src="assets/photos/photo-05.jpg" alt="Memory 05"></div>
+        <figcaption class="cap">Precious One.</figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="pbox" data-photo="06"><img src="assets/photos/photo-06.jpg" alt="Memory 06"></div>
+        <figcaption class="cap">Thee look in your eyes 🥺</figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="pbox" data-photo="07"><img src="assets/photos/photo-07.jpg" alt="Memory 07"></div>
+        <figcaption class="cap">Brightest Smileee</figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="pbox" data-photo="08"><img src="assets/photos/photo-08.jpg" alt="Memory 08"></div>
+        <figcaption class="cap">Forever Mineee.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ 4. MEMORY 3 ============ -->
+  <section class="screen page" id="p4">
+    <div class="page-head">
+      <h2>Memory 03</h2>
+      <p>A few little words under every photo.</p>
+    </div>
+    <div class="grid">
+      <figure class="shot">
+        <div class="pbox" data-photo="09"><img src="assets/photos/photo-09.jpg" alt="Memory 09"></div>
+        <figcaption class="cap">Pretty soul</figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="pbox" data-photo="10"><img src="assets/photos/photo-10.jpg" alt="Memory 10"></div>
+        <figcaption class="cap">Sunshinee.</figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="pbox" data-photo="11"><img src="assets/photos/photo-11.jpg" alt="Memory 11"></div>
+        <figcaption class="cap">Simply Perfect</figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="pbox" data-photo="12"><img src="assets/photos/photo-12.jpg" alt="Memory 12"></div>
+        <figcaption class="cap">My Fairyyy Nabuu .</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ 5. LAST ============ -->
+  <section class="screen page" id="p5">
+    <div class="page-head">
+      <h2>One last thing....</h2>
+    </div>
+        <article class="card end">
+      <p>No matter how many birthdays pass, I hope I get to be there to celebrate every single one of them with you.<br>If I had to choose again, in every lifetime, I&#x27;d still choose you.<br>Happy Birthday, my favourite person. Keep smiling, my Fairyyy Nabu. I love you more than words can ever explain. ❤️</p>
+      <p>And always remember, I love youu more than anything and anyone and I will always keep loving and admiring you till my last breath.</p>
+      <div class="big">I Love You My Nabu!</div>
+      <p class="small">This little corner of the internet will always be yours.</p>
+    </article>
+  </section>
+
+</main>
+
+  <nav aria-label="Story navigation" id="bar" class="hide">
+    <button class="navbtn" id="back" aria-label="Go back">←</button>
+    <div id="dots" aria-hidden="true">
+      <span class="dot on"></span><span class="dot"></span><span class="dot"></span>
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    </div>
+    <button class="navbtn" id="next">Next →</button>
+  </nav>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Photo">
+  <button class="lb-close" id="lbClose" aria-label="Close photo">✕</button>
+  <div>
+    <img id="lbImg" alt="">
+    <p class="lb-cap" id="lbCap"></p>
+  </div>
+</div>
+
+<script>
+(function(){
+  var screens = [].slice.call(document.querySelectorAll('.screen'));
+  var dots    = [].slice.call(document.querySelectorAll('.dot'));
+  var bar     = document.getElementById('bar');
+  var backBtn = document.getElementById('back');
+  var nextBtn = document.getElementById('next');
+  var last    = screens.length - 1;
+  var i = 0;
+
+  function go(n){
+    n = Math.max(0, Math.min(last, n));
+    if (n === i) return;
+    var forward = n > i;
+    var cur = screens[i];
+    var nxt = screens[n];
+
+    cur.classList.remove('is-active','enter-forward','enter-back');
+    cur.style.cssText = '';
+    cur.scrollTop = 0;
+
+    nxt.classList.remove('enter-forward','enter-back');
+    nxt.style.cssText = '';
+    // restart animation
+    void nxt.offsetWidth;
+    nxt.classList.add('is-active', forward ? 'enter-forward' : 'enter-back');
+
+    i = n;
+    dots.forEach(function(d,k){ d.classList.toggle('on', k === i); });
+    document.body.classList.toggle('on-cover', i === 0);
+    bar.classList.toggle('hide', i === 0);
+    backBtn.style.visibility = i === 0 ? 'hidden' : 'visible';
+    nextBtn.textContent = i === last ? 'Replay ↺' : 'Next →';
+    try { history.replaceState(null,'', i === 0 ? location.pathname : '#p' + i); } catch(e){}
+  }
+
+  document.getElementById('enter').addEventListener('click', function(){ go(1); });
+  backBtn.addEventListener('click', function(){ go(i-1); });
+  nextBtn.addEventListener('click', function(){ i === last ? go(0) : go(i+1); });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight') go(i+1);
+    if (e.key === 'ArrowLeft')  go(i-1);
+    if (e.key === 'Escape')     closeLb();
+  });
+
+  var x0 = null, y0 = null;
+  var app = document.getElementById('app');
+  app.addEventListener('touchstart', function(e){
+    if (e.touches.length !== 1) { x0 = y0 = null; return; }
+    x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
+  }, {passive:true});
+  app.addEventListener('touchend', function(e){
+    if (x0 === null) return;
+    var t = e.changedTouches[0];
+    var dx = t.clientX - x0, dy = t.clientY - y0;
+    x0 = y0 = null;
+    if (Math.abs(dx) > 56 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+      dx < 0 ? go(i+1) : go(i-1);
+    }
+  }, {passive:true});
+
+  /* ---------- lightbox ---------- */
+  var lb = document.getElementById('lb');
+  var lbImg = document.getElementById('lbImg');
+  var lbCap = document.getElementById('lbCap');
+
+  function openLb(src, cap){
+    lbImg.src = src;
+    lbImg.alt = cap || 'Photo';
+    lbCap.textContent = cap || '';
+    lb.classList.add('on');
+  }
+  function closeLb(){
+    lb.classList.remove('on');
+    lbImg.removeAttribute('src');
+  }
+  document.getElementById('lbClose').addEventListener('click', closeLb);
+  lb.addEventListener('click', function(e){ if (e.target === lb) closeLb(); });
+
+  [].forEach.call(document.querySelectorAll('.shot .pbox'), function(pbox){
+    pbox.addEventListener('click', function(){
+      var img = pbox.querySelector('img');
+      if (!img) return;
+      var cap = pbox.parentNode.querySelector('.cap');
+      openLb(img.currentSrc || img.src, cap ? cap.textContent : '');
+    });
+  });
+
+  /* ---------- starfield ---------- */
+  var cv = document.getElementById('stars');
+  var ctx = cv.getContext('2d');
+  var stars = [], w = 0, h = 0;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function size(){
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = cv.clientWidth; h = cv.clientHeight;
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    var count = Math.round((w * h) / 5200);
+    stars = [];
+    for (var k = 0; k < count; k++){
+      stars.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.25 + .25,
+        a: Math.random() * .6 + .25,
+        s: Math.random() * .02 + .004,
+        p: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  function draw(t){
+    ctx.clearRect(0,0,w,h);
+    for (var k = 0; k < stars.length; k++){
+      var st = stars[k];
+      var tw = reduce ? 1 : (0.55 + 0.45 * Math.sin(t * st.s + st.p));
+      ctx.globalAlpha = st.a * tw;
+      ctx.beginPath();
+      ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
+      ctx.fillStyle = k % 7 === 0 ? '#ffd9e8' : '#ffffff';
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  var raf = null;
+  function loop(t){ draw(t); raf = requestAnimationFrame(loop); }
+
+  function startStars(){
+    size();
+    if (reduce) { draw(0); return; }
+    if (raf === null) raf = requestAnimationFrame(loop);
+  }
+
+  window.addEventListener('resize', function(){
+    size();
+    if (reduce) draw(0);
+  });
+
+  startStars();
+  go(0);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Edit Birthday Site</title>
+<style>
+:root{--bg:#fff7fa;--card:#fff;--ink:#573849;--muted:#8a6a79;--pink:#d95f8d;--border:#f2cedd;--radius:18px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#fff7fa,#ffeaf2);color:var(--ink);padding:20px 14px 80px}
+.wrap{max-width:760px;margin:0 auto}
+h1{margin:0 0 6px;font-size:clamp(26px,7vw,40px);color:#c54e7c;font-weight:700}
+.sub{margin:0 0 24px;color:var(--muted);line-height:1.6}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin:0 0 16px;box-shadow:0 10px 30px rgba(169,78,110,.08)}
+.card h2{margin:0 0 14px;font-size:20px;color:#c54e7c}
+label{display:block;font-size:13px;font-weight:600;color:#7a5568;margin:0 0 6px}
+input[type=text], textarea{
+  width:100%;padding:12px 14px;border-radius:12px;border:1px solid #ebc4d4;
+  font:inherit;font-size:16px;color:var(--ink);background:#fff;outline:none;
+}
+input[type=text]:focus, textarea:focus{border-color:#d95f8d;box-shadow:0 0 0 3px rgba(217,95,141,.12)}
+textarea{min-height:110px;resize:vertical;line-height:1.6}
+.field{margin-bottom:14px}.field:last-child{margin-bottom:0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.grid{grid-template-columns:1fr}}
+.photo-slot{border:1px dashed #e3a9bf;border-radius:14px;padding:12px;background:#fffafd}
+.photo-slot img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:10px;display:none;background:#ffe8f1;margin-bottom:8px}
+.photo-slot.has img{display:block}
+.photo-slot .name{font-size:12px;color:var(--muted);margin-bottom:8px;word-break:break-all}
+.photo-slot input[type=file]{width:100%;font-size:13px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.btn{
+  appearance:none;border:0;border-radius:999px;padding:14px 22px;font:inherit;font-weight:700;font-size:15px;cursor:pointer;
+}
+.btn-primary{background:linear-gradient(180deg,#e06a93,#d95f8d);color:#fff;box-shadow:0 10px 24px rgba(217,95,141,.28)}
+.btn-ghost{background:#fff;color:#c54e7c;border:1px solid #efc4d6}
+.status{margin-top:12px;font-size:14px;color:var(--muted);min-height:22px}
+.status.ok{color:#1f8a52}.status.err{color:#c0394f}
+small.hint{display:block;color:var(--muted);font-size:12px;margin-top:5px;line-height:1.5}
+.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Birthday Site Editor</h1>
+  <p class="sub">Fill in your words and add photos here. Press <b>Save</b>, then tell me “apply it” and I’ll bake everything into the website.</p>
+
+  <div class="topbar">
+    <a class="btn btn-ghost" href="/index.html" target="_blank">Open Preview</a>
+    <button class="btn btn-ghost" id="reloadBtn" type="button">Reload Saved Data</button>
+  </div>
+
+  <div class="card">
+    <h2>Page 1 — Your Letter</h2>
+    <div class="field"><label for="p1title">Title</label><input id="p1title" type="text" placeholder="A letter for you"></div>
+    <div class="field"><label for="p1sub">Small subtitle</label><input id="p1sub" type="text" placeholder="Just a few words from my heart."></div>
+    <div class="field"><label for="p1p1">Paragraph 1</label><textarea id="p1p1" placeholder="Write your first paragraph..."></textarea></div>
+    <div class="field"><label for="p1p2">Paragraph 2 (optional)</label><textarea id="p1p2" placeholder="Another paragraph..."></textarea></div>
+    <div class="field"><label for="p1p3">Paragraph 3 (optional)</label><textarea id="p1p3" placeholder="Another paragraph..."></textarea></div>
+    <div class="field"><label for="p1sign">Signature</label><input id="p1sign" type="text" placeholder="With love, always."></div>
+  </div>
+
+  <div id="memoryCards"></div>
+
+  <div class="card">
+    <h2>Last Page</h2>
+    <div class="field"><label for="ltitle">Small title</label><input id="ltitle" type="text" placeholder="One last thing"></div>
+    <div class="field"><label for="lp1">Paragraph 1</label><textarea id="lp1" placeholder="Your final words..."></textarea></div>
+    <div class="field"><label for="lp2">Paragraph 2 (optional)</label><textarea id="lp2" placeholder="Optional..."></textarea></div>
+    <div class="field"><label for="lbig">Big line</label><input id="lbig" type="text" placeholder="Happy Birthday, Nabuu 💗"></div>
+    <div class="field"><label for="lsmall">Small closing line</label><input id="lsmall" type="text" placeholder="This little corner of the internet will always be yours."></div>
+  </div>
+
+  <div class="row">
+    <button class="btn btn-primary" id="saveBtn" type="button">Save</button>
+    <a class="btn btn-ghost" href="/index.html" target="_blank">Open Preview</a>
+  </div>
+  <div class="status" id="status"></div>
+  <p class="sub" style="margin-top:18px;font-size:13px">Photos are saved to <code>assets/photos/</code>. Your text is saved to <code>site-data.json</code>. After saving, come back to chat and tell me: <b>“apply it”</b>.</p>
+</div>
+
+<script>
+const memoryCards = document.getElementById('memoryCards');
+const photoState = {}; // photo-01.jpg -> dataURL
+
+function makeMemoryCard(i){
+  const n = String(i+1).padStart(2,'0');
+  const base = i*4;
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <h2>Memory 0${i+1}</h2>
+    <div class="field"><label for="m${i}title">Section title</label><input id="m${i}title" type="text" placeholder="Memory 0${i+1}"></div>
+    <div class="field"><label for="m${i}sub">Small subtitle</label><input id="m${i}sub" type="text" placeholder="A few little words under every photo."></div>
+    <div class="grid" id="m${i}grid"></div>
+  `;
+  const grid = card.querySelector(`#m${i}grid`);
+  for(let j=0;j<4;j++){
+    const idx = base + j + 1;
+    const id = String(idx).padStart(2,'0');
+    const slot = document.createElement('div');
+    slot.className = 'photo-slot';
+    slot.id = `slot-${id}`;
+    slot.innerHTML = `
+      <label>Photo ${id}</label>
+      <img id="prev-${id}" alt="Photo ${id} preview">
+      <div class="name" id="name-${id}">No photo saved yet</div>
+      <input type="file" accept="image/*" id="file-${id}">
+      <div class="field" style="margin-top:10px"><label for="cap-${id}">Caption ${id}</label><input id="cap-${id}" type="text" placeholder="Your caption here."></div>
+    `;
+    grid.appendChild(slot);
+    slot.querySelector(`#file-${id}`).addEventListener('change', e => onPick(id, e.target.files[0]));
+  }
+  memoryCards.appendChild(card);
+}
+for(let i=0;i<3;i++) makeMemoryCard(i);
+
+function onPick(id, file){
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    const dataUrl = reader.result;
+    const ext = (file.type === 'image/png') ? 'png' : (file.type === 'image/webp') ? 'webp' : 'jpg';
+    const key = `photo-${id}.${ext}`;
+    // clear other ext keys for same slot
+    ['jpg','png','webp'].forEach(e => delete photoState[`photo-${id}.${e}`]);
+    photoState[key] = dataUrl;
+    const img = document.getElementById(`prev-${id}`);
+    img.src = dataUrl;
+    document.getElementById(`slot-${id}`).classList.add('has');
+    document.getElementById(`name-${id}`).textContent = file.name + ' (ready to save)';
+  };
+  reader.readAsDataURL(file);
+}
+
+function getData(){
+  const memories = [];
+  for(let i=0;i<3;i++){
+    const caps = [];
+    for(let j=0;j<4;j++){
+      const idx = i*4+j+1;
+      caps.push(document.getElementById(`cap-${String(idx).padStart(2,'0')}`).value.trim());
+    }
+    memories.push({
+      title: document.getElementById(`m${i}title`).value.trim(),
+      subtitle: document.getElementById(`m${i}sub`).value.trim(),
+      captions: caps
+    });
+  }
+  return {
+    page1: {
+      title: document.getElementById('p1title').value.trim(),
+      subtitle: document.getElementById('p1sub').value.trim(),
+      paragraphs: [
+        document.getElementById('p1p1').value.trim(),
+        document.getElementById('p1p2').value.trim(),
+        document.getElementById('p1p3').value.trim(),
+      ].filter(Boolean),
+      sign: document.getElementById('p1sign').value.trim()
+    },
+    memories,
+    last: {
+      title: document.getElementById('ltitle').value.trim(),
+      paragraphs: [
+        document.getElementById('lp1').value.trim(),
+        document.getElementById('lp2').value.trim(),
+      ].filter(Boolean),
+      big: document.getElementById('lbig').value.trim(),
+      small: document.getElementById('lsmall').value.trim()
+    },
+    photos: photoState
+  };
+}
+
+function setStatus(msg, cls){
+  const el = document.getElementById('status');
+  el.textContent = msg; el.className = 'status ' + (cls||'');
+}
+
+async function loadData(){
+  setStatus('Loading saved data...');
+  try{
+    const res = await fetch('/api/data');
+    const data = await res.json();
+    const p1 = data.page1 || {};
+    document.getElementById('p1title').value = p1.title || '';
+    document.getElementById('p1sub').value = p1.subtitle || '';
+    const pp = p1.paragraphs || [];
+    document.getElementById('p1p1').value = pp[0] || '';
+    document.getElementById('p1p2').value = pp[1] || '';
+    document.getElementById('p1p3').value = pp[2] || '';
+    document.getElementById('p1sign').value = p1.sign || '';
+
+    const mems = data.memories || [];
+    for(let i=0;i<3;i++){
+      const m = mems[i] || {};
+      document.getElementById(`m${i}title`).value = m.title || '';
+      document.getElementById(`m${i}sub`).value = m.subtitle || '';
+      const caps = m.captions || [];
+      for(let j=0;j<4;j++){
+        const idx = i*4+j+1;
+        document.getElementById(`cap-${String(idx).padStart(2,'0')}`).value = caps[j] || '';
+      }
+    }
+    const last = data.last || {};
+    document.getElementById('ltitle').value = last.title || '';
+    const lp = last.paragraphs || [];
+    document.getElementById('lp1').value = lp[0] || '';
+    document.getElementById('lp2').value = lp[1] || '';
+    document.getElementById('lbig').value = last.big || '';
+    document.getElementById('lsmall').value = last.small || '';
+
+    // existing photos
+    (data._photos || []).forEach(fn => {
+      const m = fn.match(/^photo-(\d{2})\.(jpg|png|webp)$/i);
+      if(!m) return;
+      const id = m[1];
+      const img = document.getElementById(`prev-${id}`);
+      img.src = `/assets/photos/${fn}?t=${Date.now()}`;
+      document.getElementById(`slot-${id}`).classList.add('has');
+      document.getElementById(`name-${id}`).textContent = fn + ' (saved)';
+    });
+
+    setStatus('Loaded saved data.', 'ok');
+  }catch(e){
+    setStatus('Could not load saved data (you can still fill and save).', 'err');
+  }
+}
+
+document.getElementById('saveBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('saveBtn');
+  btn.disabled = true; btn.textContent = 'Saving...';
+  setStatus('Saving...');
+  try{
+    const res = await fetch('/api/save', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(getData())
+    });
+    const out = await res.json();
+    if(out.ok){
+      setStatus(`Saved! ${ (out.saved_photos||[]).length } photo(s) saved. Now tell me “apply it” in chat.`, 'ok');
+    } else {
+      setStatus('Save failed: ' + (out.error || 'unknown error'), 'err');
+    }
+  }catch(e){
+    setStatus('Save failed: ' + e.message, 'err');
+  }
+  btn.disabled = false; btn.textContent = 'Save';
+});
+
+document.getElementById('reloadBtn').addEventListener('click', loadData);
+loadData();
+</script>
+</body>
+</html>
