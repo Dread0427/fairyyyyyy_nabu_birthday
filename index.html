@@ -212,7 +212,7 @@ body:not(.on-cover) #stars{opacity:0}
   .ph,.ph-txt{display:none}
   .shot .pbox{background:#ffe3ee}
 }
-</style>
+ #flame{transform-origin:56px 22px;animation:flick 1.2s ease-in-out infinite}@keyframes flick{0%,100%{transform:scaleY(1);opacity:1}50%{transform:scaleY(.85);opacity:.9}}#smoke{transition:opacity .6s ease}.blow #flame{animation:none;opacity:0;transition:opacity .5s ease}.blow #smoke{opacity:.7}.blow #blowBtn{opacity:0;pointer-events:none}</style>
 </head>
 <body class="on-cover">
 
@@ -222,11 +222,13 @@ body:not(.on-cover) #stars{opacity:0}
 
   <!-- ============ 0. COVER ============ -->
   <section class="screen is-active" id="cover">
+    <button id="musicBtn" type="button" aria-label="Play music" style="position:fixed;top:calc(env(safe-area-inset-top,0px) + 12px);right:14px;z-index:10;width:48px;height:48px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.12);color:#fff;font-size:18px;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(8px)">♪</button>
+    <audio id="bgMusic" src="assets/music.mp3" loop preload="none"></audio>
     <div class="cover-inner">
       <div class="eyebrow">A little birthday surprise</div>
       <h1>Fairyyyy<br>Nabuu</h1>
       <p class="sub">Welcome</p>
-      <button class="enter" id="enter">Enter</button>
+      <div id="cakeWrap" style="display:flex;flex-direction:column;align-items:center;gap:18px"><div id="cake" aria-hidden="true" style="position:relative;width:120px;height:110px"><svg width="120" height="110" viewBox="0 0 120 110" fill="none"><rect x="10" y="52" width="100" height="52" rx="14" fill="#f7a9c4"/><rect x="10" y="52" width="100" height="14" rx="7" fill="#ffd3e2"/><rect x="52" y="22" width="8" height="34" rx="3" fill="#fff0f5"/><path id="flame" d="M56 6c6 6 6 12 0 16-6-4-6-10 0-16z" fill="#ffb347"/><ellipse id="smoke" cx="56" cy="12" rx="10" ry="14" fill="#cfc4cc" opacity="0"/></svg></div><button class="enter" id="blowBtn" type="button">Blow candle</button></div>
     </div>
   </section>
 
@@ -397,7 +399,12 @@ body:not(.on-cover) #stars{opacity:0}
     try { history.replaceState(null,'', i === 0 ? location.pathname : '#p' + i); } catch(e){}
   }
 
-  document.getElementById('enter').addEventListener('click', function(){ go(1); });
+  var cake=document.getElementById('cakeWrap');
+  var blow=document.getElementById('blowBtn');
+  if(blow){ blow.addEventListener('click', function(){
+    if(cake){ cake.classList.add('blow'); }
+    setTimeout(function(){ go(1); }, 900);
+  }); }
   backBtn.addEventListener('click', function(){ go(i-1); });
   nextBtn.addEventListener('click', function(){ i === last ? go(0) : go(i+1); });
 
@@ -504,6 +511,7 @@ body:not(.on-cover) #stars{opacity:0}
   });
 
   var vb=document.getElementById("voiceBtn"), vn=document.getElementById("voiceNote"); if(vb && vn){ vb.addEventListener("click",function(){ if(vn.paused){ vn.play().catch(function(){ vb.textContent="Tap again"; }); } else { vn.pause(); } }); vn.onplay=function(){vb.textContent="Pause";}; vn.onpause=function(){vb.textContent="Play your note";}; vn.onended=function(){vb.textContent="Play again";}; }
+  var mb=document.getElementById("musicBtn"), bm=document.getElementById("bgMusic"); if(mb && bm){ mb.addEventListener("click",function(){ if(bm.paused){ bm.play().catch(function(){ mb.textContent="×"; }); } else { bm.pause(); } }); bm.onplay=function(){mb.textContent="Ⅱ"; mb.setAttribute("aria-label","Pause music");}; bm.onpause=function(){mb.textContent="♪"; mb.setAttribute("aria-label","Play music");}; }
   startStars();
   go(0);
 })();
